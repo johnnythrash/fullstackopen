@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
+import Form from './components/Form'
+import PersonForm from './components/PersonForm'
+import ResultsField from './components/ResultsField'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
+    { name: 'Arto Hellas', key: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', key: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', key: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', key: 'Mary Poppendieck', number: '39-23-6423122' }
   ])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState(' ')
@@ -35,29 +38,9 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        filter <input value={showAll} onChange={handleFilterChange} />
-
-      </div>
-      <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        
-        <div>
-          name: <input value={newName}  onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {namesToShow.map(name=>
-          <li key={name.key}>Name:{name.name} {name.number}</li>
-        )}
-      </ul>
+      <Form text="filter" value={showAll} onChange={handleFilterChange} />
+      <PersonForm onSubmit={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
+      <ResultsField namesToShow={namesToShow} />
     </div>
   )
 }
