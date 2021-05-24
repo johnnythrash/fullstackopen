@@ -1,25 +1,28 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import Form from './components/Form'
 import PersonForm from './components/PersonForm'
 import ResultsField from './components/ResultsField'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', key: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', key: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', key: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', key: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  
+  const [persons, setPersons] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState(' ')
   const [ showAll, setShowAll ] = useState('')
+
+useEffect(() => {
+  axios.get('http://192.168.1.26:3005/persons').then(res=>{
+    setPersons(res.data)
+  })
+}, [])
 
   const addName = (event) => {
     event.preventDefault()
  
     const nameObject = {
       name: newName,
-      key: newName,
+      id: newName,
       number: newNumber
     }
     

@@ -8,7 +8,7 @@ const ResultsField = ( {namesToShow} ) => {
       <h2>Numbers:</h2>
     <ul>
       {namesToShow.map(name=>
-      <li key={name.key}>Name:{name.name} {name.number}</li>
+      <li key={name.id}>Name:{name.name} {name.number}</li>
       )}
     </ul>
     </div>
