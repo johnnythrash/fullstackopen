@@ -8,7 +8,7 @@ const Results = ({filteredCountries}) => {
   const tooMany = <div><p>too many results</p></div>
   const one = <CountryData country={filteredCountries} index={0} />
   const listLength = filteredCountries.length
-  console.log(listLength)
+
   if (listLength > 10){
     return tooMany
   } else if (listLength === 1){
@@ -16,7 +16,7 @@ const Results = ({filteredCountries}) => {
     } if (listLength <1 ){
       return <div></div>
     } else {
-      console.log("this")
+
       return <CountryList filteredCountries={filteredCountries} />
     }
   

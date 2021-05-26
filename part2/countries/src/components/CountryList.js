@@ -16,7 +16,6 @@ import CountryData from './CountryData'
     useEffect(() =>{
       const foundIndex = filteredCountries.findIndex(a=>a.name ===countryName)
       setCountryIndex(foundIndex)
-      console.log(foundIndex)
     },[clicked])
     
     if (clicked){

@@ -1,9 +1,9 @@
-
+import Weather from './Weather'
 
 const CountryData = ({country, index}) => {
   const newIndex = index === -1?0:index
   const { name, flag, languages, population, capital} = country[newIndex]
-
+  console.log(capital)
   
   return (
     <div>
@@ -15,6 +15,7 @@ const CountryData = ({country, index}) => {
       <div>
         <img alt='country flag' src={flag} heignt="400" width="400"></img>
       </div>
+      <Weather capital={capital} countryName={name} />
     </div>
   )
 
