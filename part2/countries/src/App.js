@@ -26,7 +26,7 @@ const App = () => {
         country=> country.name.toLowerCase().includes(filter)
       )
       setFilteredCountries(countriesToShow)
-        console.log(countriesToShow)
+
     }
   },[searchTerm,countries]);
 
