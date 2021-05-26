@@ -30,6 +30,7 @@ const App = () => {
     }
   },[searchTerm,countries]);
 
+  
  
   const handleInputChange = (event) => {
     

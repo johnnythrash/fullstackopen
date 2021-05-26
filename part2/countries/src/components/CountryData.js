@@ -1,7 +1,8 @@
 
 
-const CountryData = ({country}) => {
-  const { name, flag, languages, population, capital} = country[0]
+const CountryData = ({country, index}) => {
+  const newIndex = index === -1?0:index
+  const { name, flag, languages, population, capital} = country[newIndex]
 
   
   return (
