@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Form from './components/Form'
 import PersonForm from './components/PersonForm'
@@ -32,16 +31,17 @@ const App = () => {
     if (persons.some(name=> name.name === newName )){
       alert(`${newName} is already in phonebook!`)
     } else { 
-      personServices.createPerson()
-        .then(res => {
-          setPersons(persons.concat(nameObject))
+        setPersons(persons.concat(nameObject))
+        personServices.createPerson(nameObject).then(res=>{
+        personServices.getAll().then(res=>{
+          setPersons(res.data)
           setNewName('')
           setNewNumber('')
         })
-       }
-  
- 
-  }
+        
+        })
+      }
+    }
   
   const handleNameChange = (event) =>  setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -53,7 +53,7 @@ const App = () => {
     <div>
       <Form text="filter" value={showAll} onChange={handleFilterChange} />
       <PersonForm onSubmit={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
-      <ResultsField namesToShow={namesToShow} />
+      <ResultsField namesToShow={namesToShow} persons={persons} setPersons={setPersons} />
     </div>
   )
 }

@@ -15,9 +15,18 @@ const update = (id, nameObject) => {
   return axios.put(`${baseUrl}/${id}`, nameObject)
 }
 
+const removePerson = (id) => {
+  console.log(`${baseUrl}/${id}`)
+  return axios.delete(`${baseUrl}/${id}`)
+              .catch(err=>{
+                window.alert("error, name does not exist on server!")
+                console.log(err)
+              })
+}
 
 export default {
   getAll: getAll,
   createPerson: createPerson,
-  update: update
+  update: update,
+  removePerson: removePerson
 }
