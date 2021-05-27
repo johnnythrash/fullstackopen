@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Form from './components/Form'
 import PersonForm from './components/PersonForm'
 import ResultsField from './components/ResultsField'
+import personServices from './services/personServices'
+
 
 const App = () => {
   
@@ -11,24 +13,32 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState(' ')
   const [ showAll, setShowAll ] = useState('')
 
-useEffect(() => {
-  axios.get('http://192.168.1.26:3005/persons').then(res=>{
-    setPersons(res.data)
-  })
-}, [])
+  useEffect(() => {
+    personServices
+      .getAll()
+      .then(res=>{
+        setPersons(res.data)
+      })
+  }, [])
 
   const addName = (event) => {
     event.preventDefault()
  
     const nameObject = {
       name: newName,
-      id: newName,
       number: newNumber
     }
     
     if (persons.some(name=> name.name === newName )){
       alert(`${newName} is already in phonebook!`)
-    } else { setPersons(persons.concat(nameObject)) }
+    } else { 
+      personServices.createPerson()
+        .then(res => {
+          setPersons(persons.concat(nameObject))
+          setNewName('')
+          setNewNumber('')
+        })
+       }
   
  
   }
