@@ -29,8 +29,18 @@ const App = () => {
     }
     
     if (persons.some(name=> name.name === newName )){
-      alert(`${newName} is already in phonebook!`)
-    } else { 
+      if(window.confirm(`${newName} is already in phonebook. do you want to replace the number?`)){
+        const index = persons.map(p=>p.name).indexOf(newName)
+        if (index){
+          personServices.update(persons[index].id,nameObject).then(
+            personServices.getAll().then(res=>
+              setPersons(res.data))
+          )
+        } else {
+          window.alert("error! couldn't find entry in database")
+        }
+      } }
+    else { 
         setPersons(persons.concat(nameObject))
         personServices.createPerson(nameObject).then(res=>{
         personServices.getAll().then(res=>{
@@ -40,7 +50,7 @@ const App = () => {
         })
         
         })
-      }
+     }
     }
   
   const handleNameChange = (event) =>  setNewName(event.target.value)
