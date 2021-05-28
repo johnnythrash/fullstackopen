@@ -3,14 +3,17 @@ import Form from './components/Form'
 import PersonForm from './components/PersonForm'
 import ResultsField from './components/ResultsField'
 import personServices from './services/personServices'
+import NotifyField from './components/NotifyField'
+import './index.css'
 
 
 const App = () => {
   
-  const [persons, setPersons] = useState([])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState(' ')
   const [ showAll, setShowAll ] = useState('')
+  const [ successMessage, setSuccessMessage ] = useState('success!')
 
   useEffect(() => {
     personServices
@@ -32,10 +35,16 @@ const App = () => {
       if(window.confirm(`${newName} is already in phonebook. do you want to replace the number?`)){
         const index = persons.map(p=>p.name).indexOf(newName)
         if (index){
-          personServices.update(persons[index].id,nameObject).then(
-            personServices.getAll().then(res=>
-              setPersons(res.data))
-          )
+          personServices.update(persons[index].id,nameObject)
+          .then(personServices.getAll()
+          .then(res=>{
+              setPersons(res.data)
+              setSuccessMessage(`changed number for ${nameObject.name}`)
+              setTimeout(()=>{
+                setSuccessMessage(null)
+              }, 5000)
+            
+          }))
         } else {
           window.alert("error! couldn't find entry in database")
         }
@@ -47,6 +56,10 @@ const App = () => {
           setPersons(res.data)
           setNewName('')
           setNewNumber('')
+          setSuccessMessage(`added ${nameObject.name} to database`)
+          setTimeout(()=>{
+            setSuccessMessage(null)
+          }, 5000)
         })
         
         })
@@ -61,6 +74,7 @@ const App = () => {
 
   return (
     <div>
+      <NotifyField successMessage={successMessage} />
       <Form text="filter" value={showAll} onChange={handleFilterChange} />
       <PersonForm onSubmit={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <ResultsField namesToShow={namesToShow} persons={persons} setPersons={setPersons} />
