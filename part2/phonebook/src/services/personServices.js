@@ -1,5 +1,5 @@
-import { getDefaultNormalizer } from '@testing-library/dom'
 import axios from 'axios'
+
 const baseUrl = 'http://192.168.1.26:3005/persons'
 
 
@@ -18,15 +18,14 @@ const update = (id, nameObject) => {
 const removePerson = (id) => {
   console.log(`${baseUrl}/${id}`)
   return axios.delete(`${baseUrl}/${id}`)
-              .catch(err=>{
-                window.alert("error, name does not exist on server!")
-                console.log(err)
-              })
+
 }
 
-export default {
+const personServices = {
   getAll: getAll,
   createPerson: createPerson,
   update: update,
   removePerson: removePerson
 }
+
+export default personServices

@@ -3,7 +3,7 @@ import Form from './components/Form'
 import PersonForm from './components/PersonForm'
 import ResultsField from './components/ResultsField'
 import personServices from './services/personServices'
-import NotifyField from './components/NotifyField'
+import SuccessField from './components/ConfirmField'
 import './index.css'
 
 
@@ -13,7 +13,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState(' ')
   const [ showAll, setShowAll ] = useState('')
-  const [ successMessage, setSuccessMessage ] = useState('success!')
+  const [ confirmMessage, setConfirmMessage ] = useState(null)
 
   useEffect(() => {
     personServices
@@ -39,9 +39,12 @@ const App = () => {
           .then(personServices.getAll()
           .then(res=>{
               setPersons(res.data)
-              setSuccessMessage(`changed number for ${nameObject.name}`)
+              setConfirmMessage({
+                type: 'success',
+                message:`changed number for ${nameObject.name}`
+              })
               setTimeout(()=>{
-                setSuccessMessage(null)
+                setConfirmMessage(null)
               }, 5000)
             
           }))
@@ -56,9 +59,12 @@ const App = () => {
           setPersons(res.data)
           setNewName('')
           setNewNumber('')
-          setSuccessMessage(`added ${nameObject.name} to database`)
+          setConfirmMessage({
+            type: 'success',
+            message: `added ${nameObject.name} to database`
+          })
           setTimeout(()=>{
-            setSuccessMessage(null)
+            setConfirmMessage(null)
           }, 5000)
         })
         
@@ -74,10 +80,10 @@ const App = () => {
 
   return (
     <div>
-      <NotifyField successMessage={successMessage} />
+      <SuccessField confirmMessage={confirmMessage} />
       <Form text="filter" value={showAll} onChange={handleFilterChange} />
       <PersonForm onSubmit={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
-      <ResultsField namesToShow={namesToShow} persons={persons} setPersons={setPersons} />
+      <ResultsField namesToShow={namesToShow} setConfirmMessage={setConfirmMessage} setPersons={setPersons} />
     </div>
   )
 }
