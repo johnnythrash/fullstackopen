@@ -74,9 +74,17 @@ const App = () => {
   
   const handleNameChange = (event) =>  setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
-  const handleFilterChange = (event) => setShowAll(event.target.value)
+  const handleFilterChange = (event) => {
+    setShowAll(event.target.value)
+    console.log(showAll)
+  }
 
-  const namesToShow = showAll.length < 1? persons: persons.filter(name=>name.name.toUpperCase() === showAll.toUpperCase())
+  useEffect(() => {
+   console.log(showAll) 
+  },[showAll])
+
+
+  const namesToShow = showAll.length < 1? persons: persons.filter(name=>name.name.toUpperCase().includes(showAll.toUpperCase()))
 
   return (
     <div>
