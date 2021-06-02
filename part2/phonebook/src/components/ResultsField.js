@@ -7,7 +7,7 @@ const ResultsField = ( {namesToShow, setPersons, setConfirmMessage} ) => {
   const handleClick = (event) => {
     event.preventDefault()
     const name = event.target.name
-    const id = parseInt(event.target.id)
+    const id = event.target.id
     
     if(window.confirm(`do you really want to remove ${name}?`)){
         personServices.removePerson(id).then(
