@@ -53,24 +53,35 @@ const App = () => {
         }
       } }
     else { 
-        setPersons(persons.concat(nameObject))
-        personServices.createPerson(nameObject).then(res=>{
-        personServices.getAll().then(res=>{
-          setPersons(res.data)
-          setNewName('')
-          setNewNumber('')
-          setConfirmMessage({
-            type: 'success',
-            message: `added ${nameObject.name} to database`
-          })
-          setTimeout(()=>{
-            setConfirmMessage(null)
-          }, 5000)
-        })
+      console.log(nameObject.name,nameObject.number)
+
         
+        personServices.createPerson(nameObject)
+        .then(res=>{
+          console.log("successful block")
+          setPersons(persons.concat(nameObject))
+          personServices.getAll().then(res=>{
+            setPersons(res.data)
+            setNewName('')
+            setNewNumber('')
+            setConfirmMessage({
+              type: 'success',
+              message: `added ${nameObject.name} to database`
+            })
+            setTimeout(()=>{
+              setConfirmMessage(null)
+            }, 5000)
+          })
+        }).catch(error=> {
+            console.log(error.response.data)
+            setConfirmMessage({
+               type: 'error',
+               message: error.response.data.error
+             })
+             personServices.getAll().then(res=>setPersons(res.data))
         })
-     }
-    }
+      
+    }}
   
   const handleNameChange = (event) =>  setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
@@ -79,9 +90,9 @@ const App = () => {
     console.log(showAll)
   }
 
-  useEffect(() => {
+/*   useEffect(() => {
    console.log(showAll) 
-  },[showAll])
+  },[showAll]) */
 
 
   const namesToShow = showAll.length < 1? persons: persons.filter(name=>name.name.toUpperCase().includes(showAll.toUpperCase()))
@@ -95,5 +106,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
