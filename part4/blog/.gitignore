@@ -105,4 +105,4 @@ dist
 
 # mist testing and config files
 nodemon.json
-rest_testing.rest
+*.rest

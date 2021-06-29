@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 
 	const dummy = (blogs) => {
 		return 1
@@ -17,10 +19,6 @@ const favoriteBlog = (blogs) => {
 	return favorite
 }
 
-
-const mostBlogs = (blogs) => {
-	
-}
 
 
 module.exports = {
