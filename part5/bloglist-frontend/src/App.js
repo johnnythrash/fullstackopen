@@ -16,6 +16,7 @@ const App = () => {
 	const [ blogs, setBlogs] = useState([])
 	const [ blog, setBlog ] = useState({ title: '', url: '', author: '',	})
 	const [ message, setMessage ] = useState(null)
+
 	
 
 	useEffect(() => {
@@ -72,6 +73,13 @@ const App = () => {
 		setBlogs(blogs.concat(createdBlog))
 		setBlog({title: '', url: '', author:'',})
 	}
+
+	const handleLike = async (event) => {
+		console.log(event)
+	 	await blogService.likeBlog(event)
+		const blogs = await blogService.getAll()
+		setBlogs(blogs)
+	}
  
 
 	const handleTitleChange = (event) => setBlog({...blog, title:event.target.value})
@@ -96,7 +104,7 @@ const App = () => {
 		</Togglable>}
 		{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : ''}
 		{blogs.map(blog =>
-		<Blog key={blog.id} blog={blog} />
+		<Blog key={blog.id} blog={blog} handleLike={handleLike} />
 		)}
 		{ user? 
 		<Togglable buttonLabel = "new blog">
