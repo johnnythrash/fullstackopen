@@ -85,16 +85,15 @@ const App = () => {
 	<div>
 		<Notification message={message} />
 		<h2>blogs</h2>
-		<Togglable buttonLabel = "login">
-			<Notification message={message} />
-						<LoginForm 
-						onSubmit={handleLogin} 
-						username={username}
-						password={password}
-						setUsername={setUsername}
-						setPassword={setPassword}
+		{ user ? '':<Togglable buttonLabel = "login">
+			<LoginForm 
+				onSubmit={handleLogin} 
+				username={username}
+				password={password}
+				setUsername={setUsername}
+				setPassword={setPassword}
 			/>
-		</Togglable>
+		</Togglable>}
 		{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : ''}
 		{blogs.map(blog =>
 		<Blog key={blog.id} blog={blog} />
