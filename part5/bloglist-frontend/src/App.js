@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 import LoginService from './services/login'
+import Togglable from './components/Togglable'
 import './index.css'
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
 	const [ blogs, setBlogs] = useState([])
 	const [ blog, setBlog ] = useState({ title: '', url: '', author: '',	})
 	const [ message, setMessage ] = useState(null)
+	
 
 	useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -76,32 +78,29 @@ const App = () => {
 	const handleAuthorChange = (event) =>setBlog({ ...blog, author: event.target.value})
 	const handleUrlChange = (event) => setBlog({...blog, url: event.target.value})
 	
-
-	if (user === null){
-		return(
-		<div>
-			<h2>login</h2>
-			<Notification message={message} />
-			<LoginForm 
-				onSubmit={handleLogin} 
-				username={username}
-				password={password}
-				setUsername={setUsername}
-				setPassword={setPassword}
-			/>
-		</div>
-	 )
-}
 	
-	return (
-		<div>
-			<h2>blogs</h2>
-			<Notification message={message} />
-			<div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div>
-			{blogs.map(blog =>
-			<Blog key={blog.id} blog={blog} />
-			)}
 
+
+	return(
+	<div>
+		<Notification message={message} />
+		<h2>blogs</h2>
+		<Togglable buttonLabel = "login">
+			<Notification message={message} />
+						<LoginForm 
+						onSubmit={handleLogin} 
+						username={username}
+						password={password}
+						setUsername={setUsername}
+						setPassword={setPassword}
+			/>
+		</Togglable>
+		{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : ''}
+		{blogs.map(blog =>
+		<Blog key={blog.id} blog={blog} />
+		)}
+		{ user? 
+		<Togglable buttonLabel = "new blog">
 			<BlogForm 
 				submitBlog={submitBlog}
 				handleAuthorChange={handleAuthorChange}
@@ -111,8 +110,11 @@ const App = () => {
 				url={blog.url}
 				author={blog.author}
 			/>
-		</div>
-	)
+		</Togglable>
+			: ''
+		}
+	</div>
+)
 
 }
 
