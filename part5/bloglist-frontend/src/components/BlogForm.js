@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogForm = ({ submitBlog,handleAuthorChange, handleTitleChange, handleURLChange, title,author, url}) => {
+const BlogForm = ({ submitBlog,handleAuthorChange, handleTitleChange, handleURLChange, title,author, url }) => {
 
 
 	return (
@@ -17,20 +17,20 @@ const BlogForm = ({ submitBlog,handleAuthorChange, handleTitleChange, handleURLC
 			</div>
 			<div>
 				author:
-				<input 
-				type="text"
-				value={author}
-				name="author"
-				onChange={handleAuthorChange}
+				<input
+					type="text"
+					value={author}
+					name="author"
+					onChange={handleAuthorChange}
 				/>
 			</div>
 			<div>
 				url:
-				<input 
-				type="text"
-				value={url}
-				name="url"
-				onChange ={handleURLChange}
+				<input
+					type="text"
+					value={url}
+					name="url"
+					onChange ={handleURLChange}
 				/>
 			</div>
 			<button type="submit">create</button>

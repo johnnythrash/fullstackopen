@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
@@ -17,15 +17,16 @@ const App = () => {
 	const [ blog, setBlog ] = useState({ title: '', url: '', author: '',	})
 	const [ message, setMessage ] = useState(null)
 
-	
+	const blogFormRef = useRef()
+
 
 	useEffect(() => {
-    blogService.getAll().then(blogs =>{
-      const sortedBlogs = [...blogs].sort((a,b)=> b.likes - a.likes)
+		blogService.getAll().then(blogs => {
+			const sortedBlogs = [...blogs].sort((a,b) => b.likes - a.likes)
 			setBlogs(sortedBlogs)
 		}
-    ) 
-  }, [])
+		)
+	}, [])
 
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -39,7 +40,7 @@ const App = () => {
 	const handleLogin = async (event) => {
 		event.preventDefault()
 		try {
-			const user = await LoginService.login({ 
+			const user = await LoginService.login({
 				username, password
 			})
 			window.localStorage.setItem(
@@ -50,12 +51,11 @@ const App = () => {
 			setUsername('')
 			setPassword('')
 		} catch (exception) {
-			console.log("error handling")
 			setMessage({ type: 'error', message: 'Wrong Credentials!' })
 			setTimeout(() => {
 				setMessage(null)
 			}, 5000)
-		} 
+		}
 	}
 
 	const handleLogout = (event) => {
@@ -64,66 +64,76 @@ const App = () => {
 		setUser(null)
 	}
 
- 	const submitBlog = async (event) => {
+	const submitBlog = async (event) => {
 		event.preventDefault()
+		blogFormRef.current.toggleVisibility()
 		const createdBlog = await blogService.create(blog)
 		setMessage({ type: 'success', message: `${createdBlog.title} by ${createdBlog.author} added!` })
 		console.log('message', message)
 		setTimeout(() => {
-				setMessage(null)
-			}, 5000)
-		setBlogs(blogs.concat(createdBlog))
-		setBlog({title: '', url: '', author:'',})
+			setMessage(null)
+		}, 5000)
+		const newBlogList = await blogService.getAll()
+		setBlogs(newBlogList)
+		setBlog({ title: '', url: '', author:'' })
 	}
 
 	const handleLike = async (event) => {
 		console.log(event)
-	 	await blogService.likeBlog(event)
+		await blogService.likeBlog(event)
 		const blogs = await blogService.getAll()
 		setBlogs(blogs)
 	}
- 
 
-	const handleTitleChange = (event) => setBlog({...blog, title:event.target.value})
-	const handleAuthorChange = (event) =>setBlog({ ...blog, author: event.target.value})
-	const handleUrlChange = (event) => setBlog({...blog, url: event.target.value})
-	
-	
+	const handleDelete = async (event) => {
+		if (window.confirm(`are you sure you want to delete ${event.title} by ${event.author}?`)){
+			await blogService.deleteBlog(event.id)
+			const blogs = await blogService.getAll()
+			setBlogs(blogs)
+		}
+	}
+
+	const handleTitleChange = (event) => setBlog({ ...blog, title:event.target.value })
+	const handleAuthorChange = (event) => setBlog({ ...blog, author: event.target.value })
+	const handleUrlChange = (event) => setBlog({ ...blog, url: event.target.value })
+
 
 
 	return(
-	<div>
-		<Notification message={message} />
-		<h2>blogs</h2>
-		{ user ? '':<Togglable buttonLabel = "login">
-			<LoginForm 
-				onSubmit={handleLogin} 
-				username={username}
-				password={password}
-				setUsername={setUsername}
-				setPassword={setPassword}
-			/>
-		</Togglable>}
-		{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : ''}
-		{blogs.map(blog =>
-		<Blog key={blog.id} blog={blog} handleLike={handleLike} />
-		)}
-		{ user? 
-		<Togglable buttonLabel = "new blog">
-			<BlogForm 
-				submitBlog={submitBlog}
-				handleAuthorChange={handleAuthorChange}
-				handleTitleChange={handleTitleChange}
-				handleURLChange={handleUrlChange}
-				title={blog.title}
-				url={blog.url}
-				author={blog.author}
-			/>
-		</Togglable>
-			: ''
-		}
-	</div>
-)
+		<div>
+			<Notification message={message} />
+			<h2>blogs</h2>
+			{ user ? '':<Togglable buttonOpenLabel = 'login' buttonCloseLabel= 'hide'>
+				<LoginForm
+					onSubmit={handleLogin}
+					username={username}
+					password={password}
+					setUsername={setUsername}
+					setPassword={setPassword}
+				/>
+			</Togglable>}
+			{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : ''}
+			{user ? blogs.map(blog =>
+				<Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user.username} />)
+				: blogs.map(blog =>
+					<Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user} />)
+			}
+			{ user?
+				<Togglable buttonOpenLabel = 'create new blog' buttonCloseLabel = 'hide form' ref={blogFormRef}>
+					<BlogForm
+						submitBlog={submitBlog}
+						handleAuthorChange={handleAuthorChange}
+						handleTitleChange={handleTitleChange}
+						handleURLChange={handleUrlChange}
+						title={blog.title}
+						url={blog.url}
+						author={blog.author}
+					/>
+				</Togglable>
+				: ''
+			}
+		</div>
+	)
 
 }
 

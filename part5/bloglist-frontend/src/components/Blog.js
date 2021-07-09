@@ -1,7 +1,8 @@
 import React from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({blog, handleLike}) => {
+
+const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -10,24 +11,27 @@ const Blog = ({blog, handleLike}) => {
 		borderWidth: 1,
 		marginBottom: 5
 	}
-	
+
 	const titleStyle = {
-		fontSize: '1.2em',
 		fontWeight: 'bold'
 	}
 
-return (		
-<div style={blogStyle}>
-	<div style={titleStyle}>{blog.title} by {blog.author}</div>
-		<Togglable buttonLabel='view'>
-			<div>
-				<div>URL: <a href={blog.url}>{blog.url}</a></div>
-				<div>Likes: {blog.likes} <button onClick={(e) => handleLike(blog)}>like</button></div>
-				<div>Posted By: {blog.user.name}</div>
-			</div>
-			
-		</Togglable>
-  </div>  
+
+	return (
+		<div style={blogStyle}>
+			<div style={titleStyle}>{blog.title} by {blog.author}</div>
+			<Togglable buttonOpenLabel='view' buttonCloseLabel='hide'>
+				<div>
+					<div>URL: <a href={blog.url}>{blog.url}</a></div>
+					<div>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button></div>
+					<div>Posted By: {blog.user.name}</div>
+					{user === blog.user.username?
+						<button onClick={() => handleDelete(blog)}>delete blog</button>
+						: ''
+					}
+				</div>
+			</Togglable>
+		</div>
 	)
 }
 
