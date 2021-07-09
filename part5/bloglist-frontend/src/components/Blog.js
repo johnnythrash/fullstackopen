@@ -19,7 +19,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
 	return (
 		<div style={blogStyle}>
-			<div style={titleStyle}>{blog.title} by {blog.author}</div>
+			<div className='titleAuthor' style={titleStyle}>{blog.title} by {blog.author}</div>
 			<Togglable buttonOpenLabel='view' buttonCloseLabel='hide'>
 				<div>
 					<div>URL: <a href={blog.url}>{blog.url}</a></div>
