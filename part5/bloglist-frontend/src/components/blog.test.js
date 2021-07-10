@@ -5,7 +5,7 @@ import Blog from './Blog'
 
 
 
-describe('component only renders blog title and author by default', () => {
+describe('blog rendering', () => {
 
 	let blog, component, div, togglableContent
 
