@@ -18,13 +18,13 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
 
 	return (
-		<div style={blogStyle}>
+		<div id='blog' style={blogStyle}>
 			<div className='titleAuthor' style={titleStyle}>{blog.title} by {blog.author}</div>
-			<Togglable buttonOpenLabel='view' buttonCloseLabel='hide'>
+			<Togglable id='#togglable' buttonOpenLabel='view' buttonCloseLabel='hide'>
 				<div>
-					<div>URL: <a href={blog.url}>{blog.url}</a></div>
-					<div>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button></div>
-					<div>Posted By: {blog.user.name}</div>
+					<div id='urlName'>URL: <a href={blog.url}>{blog.url}</a></div>
+					<div id='likes'>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button></div>
+					<div id='postedBy'>Posted By: {blog.user.name}</div>
 					{user === blog.user.username?
 						<button onClick={() => handleDelete(blog)}>delete blog</button>
 						: ''

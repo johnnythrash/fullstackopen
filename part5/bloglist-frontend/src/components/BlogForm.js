@@ -13,7 +13,7 @@ const BlogForm = ({ submitBlog, title, author, url }) => {
 	const addBlog = (event) => {
 		event.preventDefault()
 		submitBlog(blog)
-		setBlog('')
+		setBlog({})
 	}
 
 	return (
@@ -50,7 +50,7 @@ const BlogForm = ({ submitBlog, title, author, url }) => {
 						onChange ={handleUrlChange}
 					/>
 				</div>
-				<button type='submit'>create</button>
+				<button id='submit-button' type='submit'>create</button>
 			</form>
 		</div>
 	)
