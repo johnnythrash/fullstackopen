@@ -5,8 +5,15 @@ import { anecdoteVoteNotify, clearNotification } from '../reducers/notificationR
 
 
 const AnecdoteList = (props) => {
-	const anecdotes = useSelector(state => state.anecdotes.slice().sort((a,b) => b.votes - a.votes))
-  const dispatch = useDispatch()
+	
+	const anecdotes = useSelector(state => {
+		if (state.filter === 'ALL'){
+			return state.anecdotes.slice().sort((a,b) => b.votes - a.votes)
+		} else 
+			return state.anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(state.filter.toLowerCase()))
+		})
+  
+		const dispatch = useDispatch()
 
   const vote = (id, content) => {
     console.log('vote', id, content)
