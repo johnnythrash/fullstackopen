@@ -1,15 +1,3 @@
-import anecdoteService from '../services/anecdotes'
-
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-} 
-
 export const anecdoteVote = (id) => {
 	console.log(id)
 	return {
@@ -26,15 +14,11 @@ export const initAnecdotes = (anecdotes) => {
 	}
 }
 
-export const addAnecdote = (content) => {
-	console.log('adding', content)
+export const addAnecdote = (data) => {
+	console.log('adding', data)
 	return {
 		type: 'ADD',
-		data: {
-			content: content,
-			votes: 0,
-			id: getId()
-		}
+		data
 	}
 }
 

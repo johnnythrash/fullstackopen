@@ -3,10 +3,20 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3002/anecdotes'
 
+const getId = () => (100000 * Math.random()).toFixed(0)
+
 const getAll = async () => {
 	const response = await axios.get(baseUrl)
 	console.log(response.data)
 	return response.data
 }
 
-export default { getAll } 
+
+const createNew = async (content) => {
+	console.log(content)
+	const object = {content, votes: 0 }
+	const response = await axios.post(baseUrl, object)
+	return response.data
+}
+
+export default { getAll, createNew } 
