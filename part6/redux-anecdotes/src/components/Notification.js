@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 
 const Notification = (props) => {
+
+
 	const notification = props.notification
+	useEffect(()=>{console.log(notification)},[notification])
 	const style = {
     border: 'solid',
     padding: 10,
@@ -18,6 +21,7 @@ const Notification = (props) => {
 }
 
 const mapStateToProps = (state) => {
+	console.log('state.notification',state.notification)
 	return{
 		notification: state.notification
 	}

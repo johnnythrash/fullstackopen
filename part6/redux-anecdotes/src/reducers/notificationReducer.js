@@ -1,26 +1,24 @@
+let alert = 0
+
 export const setNotification = (text,time) => {
 	console.log(`NOTIFY ${text}`)
-	setTimeout(()=>{
-		return {
-			type: 'CLEAR'
-	}
-	},time)  
-	return {
-		type: 'VOTE',
-		data: { text }
-	}
-
-}
-
-export const addAnecdoteNotify = (content) => {
-	console.log('adding', content)
-	return {
-		type: 'ADDED_NOTE',
-		data: {
-			content: content,
+	return async dispatch => {
+		clearTimeout(alert)
+		alert=setTimeout(()=>{
+			dispatch({
+				type: 'CLEAR'
+			})
+			
+		},time)  
+		dispatch({
+			type: 'NOTIFY',
+			data: { text }
+		})
 		}
 	}
-}
+
+
+
 
 export const clearNotification = () => {
 	return {
@@ -30,12 +28,9 @@ export const clearNotification = () => {
 
 const notificationReducer = (state ='', action) => {
 	switch(action.type){
-		case 'VOTE':
+		case 'NOTIFY':
 			console.log('VOTE')
 			return action.data.text 
-		case 'ADDED_NOTE':
-			console.log('ADD')
-			return `added ${action.data.content}`
 		case 'CLEAR':
 			return ''
 		default:

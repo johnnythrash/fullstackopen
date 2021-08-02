@@ -5,7 +5,6 @@ import { setNotification } from '../reducers/notificationReducer'
 
 
 const AnecdoteList = (props) => {
-	console.log(props)
 	const anecdotesToShow = () => {
 		if (props.filter === 'ALL'){
 			return props.anecdotes.slice().sort((a,b) => b.votes - a.votes)
