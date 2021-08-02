@@ -1,9 +1,15 @@
-export const anecdoteVoteNotify = (anecdote) => {
-	console.log(`NOTIFY ${anecdote}`)
+export const setNotification = (text,time) => {
+	console.log(`NOTIFY ${text}`)
+	setTimeout(()=>{
+		return {
+			type: 'CLEAR'
+	}
+	},time)  
 	return {
 		type: 'VOTE',
-		data: { anecdote }
+		data: { text }
 	}
+
 }
 
 export const addAnecdoteNotify = (content) => {
@@ -26,7 +32,7 @@ const notificationReducer = (state ='', action) => {
 	switch(action.type){
 		case 'VOTE':
 			console.log('VOTE')
-			return `voted for: ${action.data.anecdote}` 
+			return action.data.text 
 		case 'ADDED_NOTE':
 			console.log('ADD')
 			return `added ${action.data.content}`

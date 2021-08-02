@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { anecdoteVote, initAnecdotes } from '../reducers/anecdoteReducer'
-import { anecdoteVoteNotify, clearNotification } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdotes'
-
-
+import { anecdoteVote, initializeAnecdotes } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 
 const AnecdoteList = (props) => {
@@ -17,19 +14,16 @@ const AnecdoteList = (props) => {
 		})
   
 		const dispatch = useDispatch()
+		
 		useEffect(() => {
-			anecdoteService.getAll().then(anecdotes => dispatch(initAnecdotes(anecdotes)))
+			dispatch(initializeAnecdotes())
 		}, [dispatch])
 
-  const vote = (id, content) => {
-    console.log('vote', id, content)
-		dispatch(anecdoteVote(id))
-		dispatch(anecdoteVoteNotify(content))
-		setTimeout(() => {
-			dispatch(clearNotification())
-		},5000)
-		
-  }
+  
+		const vote = (anecdote) => {
+			dispatch(anecdoteVote(anecdote))
+			dispatch(setNotification(`you voted for ${anecdote.content}`,5000))
+	  }
 
 	return (
 		<div>
@@ -41,7 +35,7 @@ const AnecdoteList = (props) => {
 				</div>
 				<div>
 					has {anecdote.votes}
-					<button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+					<button onClick={() => vote(anecdote)}>vote</button>
 				</div>
 			</div>
 		)}
