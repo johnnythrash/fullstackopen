@@ -1,12 +1,13 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link
+  Switch, Route, Link, useParams
 } from "react-router-dom"
 import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
 import CreateNew from './components/CreateNew'
+import AnecdoteView from './components/AnecdoteView'
 
 const Menu = ({addNew,anecdotes}) => {
   const padding = {
@@ -21,6 +22,9 @@ const Menu = ({addNew,anecdotes}) => {
 			</div>
 
 			<Switch>
+				<Route path='/anecdotes/:id'>
+					<AnecdoteView anecdotes={anecdotes} />
+				</Route>
 				<Route path="/create">
 				<CreateNew addNew={addNew} />
 				</Route>
