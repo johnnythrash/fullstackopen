@@ -3,10 +3,11 @@ import { useField } from '../hooks'
 
 
 const CreateNew = ({setNotification, addNew }) => {
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const {clear:clearContent, ...content} = useField()
+  const {clear:clearAuthor, ...author} = useField()
+  const {clear:clearInfo, ...info} = useField()
 
+	
 	
 	let history = useHistory()
 
@@ -28,6 +29,13 @@ const CreateNew = ({setNotification, addNew }) => {
 		history.push('/')
   }
 
+	const handleReset = (e) =>{
+		e.preventDefault()
+		clearAuthor()
+		clearContent()
+		clearInfo()
+
+	}
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -46,6 +54,7 @@ const CreateNew = ({setNotification, addNew }) => {
         </div>
         <button>create</button>
       </form>
+			<button onClick={handleReset}>reset</button>
     </div>
   )
 

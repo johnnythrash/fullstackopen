@@ -7,9 +7,14 @@ export const useField = () => {
 		setValue(event.target.value)
 	}
 
+	const clear = () =>{
+		setValue('')
+	}
+
 	return {
 		value,
-		onChange
-	}
+		onChange,
+		clear
+	} 
 
 }
