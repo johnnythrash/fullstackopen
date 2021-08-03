@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, useParams
+  Switch, Route, Link, useParams, Redirect
 } from "react-router-dom"
 import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
 import CreateNew from './components/CreateNew'
 import AnecdoteView from './components/AnecdoteView'
+import Notification from './components/Notification'
+import './index.css'
 
-const Menu = ({addNew,anecdotes}) => {
+const Menu = ({ addNew,anecdotes, setNotification }) => {
   const padding = {
     paddingRight: 5
   }
@@ -26,7 +28,7 @@ const Menu = ({addNew,anecdotes}) => {
 					<AnecdoteView anecdotes={anecdotes} />
 				</Route>
 				<Route path="/create">
-				<CreateNew addNew={addNew} />
+				<CreateNew addNew={addNew} setNotification={setNotification}/>
 				</Route>
 				<Route path="/about">
 					<About />
@@ -61,6 +63,7 @@ const App = () => {
 
   const [notification, setNotification] = useState('')
 
+
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
@@ -83,8 +86,8 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu addNew={addNew} anecdotes={anecdotes}/>
- 
+      <Menu addNew={addNew} anecdotes={anecdotes} setNotification={setNotification} />
+			<Notification message={notification} />
       <Footer />
     </div>
   )

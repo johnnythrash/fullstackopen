@@ -1,20 +1,29 @@
 import React, {useState} from 'react'
+import { useHistory } from 'react-router-dom'
 
 
-const CreateNew = (props) => {
+const CreateNew = ({setNotification, addNew }) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+	
+	let history = useHistory()
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
+    
+		e.preventDefault()
+    addNew({
       content,
       author,
       info,
       votes: 0
     })
+		setTimeout(()=>{
+			setNotification('')
+		},10000)
+		setNotification(`added ${content}`)
+		history.push('/')
   }
 
   return (
