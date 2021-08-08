@@ -21,10 +21,6 @@ const CreateUserForm = () => {
 		setNewName('')
 	}
 
-	useEffect(( ) => {
-		console.log(newUserObj)
-	},[newUserObj])
-
 	return(
 		<div>
 			<h2>create new</h2>

@@ -2,8 +2,6 @@ let alert = 0
 
 export const setNotification = (obj, time) => {
 	const { type, message } = obj
-	console.log(message)
-	console.log(`type: ${type}, text: ${message}`)
 
 	return async dispatch => {
 		clearTimeout(alert)
@@ -31,8 +29,10 @@ export const clearNotification = () => {
 const notificationReducer = (state='', action) => {
 	switch(action.type){
 	case 'NOTIFY':
+		console.log('NOTIFY')
 		return action.data
 	case 'CLEAR':
+		console.log('CLEAR')
 		return ''
 	default:
 		return state

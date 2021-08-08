@@ -25,8 +25,10 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 					<div id='urlName'>URL: <a href={blog.url}>{blog.url}</a></div>
 					<div id='likes'>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button></div>
 					<div id='postedBy'>Posted By: {blog.user.name}</div>
-					{user === blog.user.username?
-						<button onClick={() => handleDelete(blog)}>delete blog</button>
+					{ user?
+						user === blog.user.username?
+							<button onClick={() => handleDelete(blog)}>delete blog</button>
+							: ''
 						: ''
 					}
 				</div>

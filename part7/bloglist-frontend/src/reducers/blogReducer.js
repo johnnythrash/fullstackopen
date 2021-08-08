@@ -32,6 +32,15 @@ export const likeBlog = (blog) => {
 	}
 }
 
+export const deleteBlog = ( ) => {
+	return async dispatch => {
+		//const blogToDelete = await blogService.deleteBlog(id)
+		dispatch({
+			type: 'DELETE',
+			data: ''
+		})
+	}
+}
 
 
 const blogReducer = (state =[], action) => {
@@ -42,6 +51,13 @@ const blogReducer = (state =[], action) => {
 	case 'INIT':
 		console.log('INIT')
 		return action.data
+	case 'LIKE':{
+
+		console.log('LIKE')
+		return state.map(blog => {
+			return blog
+		})
+	}
 	default:
 		return state
 	}
