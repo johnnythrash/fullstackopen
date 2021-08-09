@@ -1,9 +1,9 @@
 import React from 'react'
-import Togglable from './Togglable'
+import Togglable from '../Togglable'
 
 
-const Blog = ({ blog, handleLike, handleDelete, user }) => {
-
+const SingleBlog = ({ blog, handleLike, handleDelete, user }) => {
+	console.log(blog)
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
@@ -37,4 +37,4 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 	)
 }
 
-export default Blog
+export default SingleBlog

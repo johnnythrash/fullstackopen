@@ -7,7 +7,11 @@ const createUser = async (userObj) => {
 	return response.data
 }
 
+const getAll = async () => {
+	const response = await axios.get(baseUrl)
+	return response.data
+}
 
-export default { createUser }
+export default { createUser, getAll }
 
 

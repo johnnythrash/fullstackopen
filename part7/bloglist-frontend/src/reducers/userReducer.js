@@ -9,9 +9,10 @@ export const setUser = (user) => {
 export const clearUser = ( ) => {
 	return async dispatch =>
 		dispatch({
-			type: 'CLEAR',
+			type: 'CLEARUSER',
 		})
 }
+
 
 const userReducer = (state=null, action) => {
 	switch (action.type){
@@ -19,7 +20,7 @@ const userReducer = (state=null, action) => {
 		const user = action.data
 		return user
 	}
-	case 'CLEAR':{
+	case 'CLEARUSER':{
 		return null
 	}
 	default:

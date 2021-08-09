@@ -32,4 +32,15 @@ usersRouter.get('/', async (request, response) => {
 	response.json(users)
 })
 
+usersRouter.get('/:id', async (request, response) => {
+	const id = request.params.id
+	const person = await User.findById(id)
+	if (person){
+		response.json(person)
+	} else {
+		console.log('notfound')
+		response.status(404).end
+	}
+})
+
 module.exports = usersRouter

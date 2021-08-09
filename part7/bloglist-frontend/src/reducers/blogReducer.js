@@ -11,6 +11,16 @@ export const initBlogs = () => {
 	}
 }
 
+export const getBlogById = (id) => {
+	return async dispatch => {
+		const blog = await blogService.getById(id)
+		dispatch({
+			type: 'GETBYID',
+			data: blog
+		})
+	}
+}
+
 
 export const createBlog = (data) => {
 	return async dispatch => {
@@ -52,12 +62,13 @@ const blogReducer = (state =[], action) => {
 		console.log('INIT')
 		return action.data
 	case 'LIKE':{
-
 		console.log('LIKE')
 		return state.map(blog => {
 			return blog
 		})
 	}
+	case 'GETBYID':
+		return action.data
 	default:
 		return state
 	}
