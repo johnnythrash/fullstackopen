@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { initBlogs, likeBlog } from '../../reducers/blogReducer'
+import CommentForm from './CommentForm'
 import blogService from '../../services/blogs'
 
 const BlogPage = ({ blogs, user }) => {
@@ -30,6 +31,7 @@ const BlogPage = ({ blogs, user }) => {
 	return (
 		<div>
 			<h2>{blog.title}</h2>
+			<h4><em>{blog.author}</em></h4>
 			<div>
 				<div id='urlName'>URL: <a href={blog.url}>{blog.url}</a></div>
 				<div id='likes'>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>like</button></div>
@@ -40,7 +42,12 @@ const BlogPage = ({ blogs, user }) => {
 						: ''
 					: ''
 				}
+				<h2>Comments</h2>
+				{blog.comments.length > 0? <ul>
+					{blog.comments.map(comment => <li key={comment}>{comment}</li>)}
+				</ul>: <p>no comments yet...</p>}
 			</div>
+			{ user ? <CommentForm blog={blog}/>: ''}
 		</div>
 	)
 }

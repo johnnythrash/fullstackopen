@@ -17,6 +17,10 @@ const Navbar = () => {
 		paddingRight: 5
 	}
 
+	const paddingL = {
+		paddingLeft: 5
+	}
+
 	const flexClass = {
 		display: 'flex',
 		width: '100 vw',
@@ -55,7 +59,7 @@ const Navbar = () => {
 			<div style={flexClass}>
 				<Link style={padding} to='/'>Home</Link>
 				<Link style={padding} to='/users'>User List</Link>
-				{user? <div><p>{user.name} logged-in</p><button onClick={handleLogout}>logout</button></div> : <Link style={padding} to='/login'>login</Link>}
+				{user? <div><em>{user.name} logged-in</em><button style={paddingL} onClick={handleLogout}>logout</button></div> : <Link style={padding} to='/login'>login</Link>}
 			</div>
 
 			<Switch>

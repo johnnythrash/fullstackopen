@@ -11,17 +11,6 @@ export const initBlogs = () => {
 	}
 }
 
-export const getBlogById = (id) => {
-	return async dispatch => {
-		const blog = await blogService.getById(id)
-		dispatch({
-			type: 'GETBYID',
-			data: blog
-		})
-	}
-}
-
-
 export const createBlog = (data) => {
 	return async dispatch => {
 		const newBlog = await blogService.create(data)
@@ -37,6 +26,16 @@ export const likeBlog = (blog) => {
 		const changedBlog = await blogService.likeBlog(blog)
 		dispatch({
 			type: 'LIKE',
+			data: changedBlog.id
+		})
+	}
+}
+
+export const addComment = (blog, comment) => {
+	return async dispatch => {
+		const changedBlog = await blogService.addComment(blog, comment)
+		dispatch({
+			type: 'ADDCOMMENT',
 			data: changedBlog.id
 		})
 	}
@@ -67,8 +66,12 @@ const blogReducer = (state =[], action) => {
 			return blog
 		})
 	}
-	case 'GETBYID':
-		return action.data
+	case 'ADDCOMMENT':{
+		console.log('ADD')
+		return state.map(blog => {
+			return blog
+		})
+	}
 	default:
 		return state
 	}

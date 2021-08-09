@@ -51,4 +51,18 @@ const likeBlog = async (blog) => {
 	return response.data
 }
 
-export default { getAll, create, setToken, deleteBlog, likeBlog, getById }
+const addComment = async (blog, comment) => {
+	const blogID = blog.id
+	const newID = { username: blog.user.username, name: blog.user.name, _id: blog.user.id }
+	const { id, user, ...remaining } = blog
+	const updatedBlog = {
+		...remaining,
+		'_id': blog.id,
+		'user': newID,
+		comments: blog.comments.concat(comment)
+	}
+	const response = await axios.put(`${baseUrl}/${blogID}`, updatedBlog)
+	return response.data
+}
+
+export default { getAll, create, setToken, deleteBlog, likeBlog, getById, addComment }

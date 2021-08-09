@@ -9,7 +9,7 @@ import blogService from '../../services/blogs'
 
 
 const BlogForm = () => {
-	const [ blog, setBlog ] = useState({ title: '', url: '', author: '',	})
+	const [ blog, setBlog ] = useState({ title: '', url: '', author: '', })
 	const handleTitleChange = (event) => setBlog({ ...blog, title:event.target.value })
 	const handleAuthorChange = (event) => setBlog({ ...blog, author: event.target.value })
 	const handleUrlChange = (event) => setBlog({ ...blog, url: event.target.value })
