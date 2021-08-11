@@ -1,26 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+// import { makeStyles } from '@material-ui/core/styles'
+import Alert from '@material-ui/lab/Alert'
+import { Snackbar } from '@material-ui/core'
+import { clearNotification } from '../reducers/notificationReducer'
 import { useSelector } from 'react-redux'
 
-const Notification = () => {
-	const notification = useSelector(state => state.notification)
 
-	if (notification.type !== ''){
-		if (notification.type === 'success'){
-			return (
-				<div className="notifySuccess">
-					{notification.message}
-				</div>
-			)
+
+
+
+const Notification = () => {
+	const { message, autoCloseDuration, type } = useSelector(state => state.notification)
+	const dispatch = useDispatch()
+	const [ open, setOpen ] = useState(true)
+
+	useEffect(() => console.log(open),[open])
+	useEffect(() => console.log(type),[type])
+
+
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return
 		}
-		if (notification.type === 'error'){
-			return (
-				<div className="notifyError">
-					{notification.message}
-				</div>
-			)
-		}
+		setOpen(false)
+		dispatch(clearNotification())
 	}
-	return null
+
+
+	if (type === 'success'){
+		return (
+			<Snackbar open={open} onClose={handleClose} autoHideDuration={autoCloseDuration} message={<Alert onClose={handleClose} severity="success">{message}</Alert>} />
+		)
+	}
+	if (type === 'error'){
+		return (
+
+			<Snackbar open={open} onClose={handleClose}>
+				<Alert onClose={handleClose} severity="error">{message}</Alert>
+			</Snackbar>
+
+		)
+	}
+
+	else return null
+
 }
 
 export default Notification

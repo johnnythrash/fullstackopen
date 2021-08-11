@@ -1,38 +1,40 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { initBlogs } from '../../reducers/blogReducer'
-import { initUsers } from '../../reducers/usersReducer'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, Link } from 'react-router-dom'
 import { clearUser, setUser } from '../../reducers/userReducer'
-import BlogList from '../Blog/BlogList'
-import BlogForm from '../Blog/BlogForm'
-import UserPage from '../User/UserPage'
-import UsersList from '../User/UsersList'
-import BlogPage from '../Blog/BlogPage'
-import LoginArea from '../Login/LoginArea'
 import blogService from '../../services/blogs'
+import { makeStyles, AppBar, Tab, Toolbar, Box, IconButton, Menu, MenuItem, Typography, Button, Avatar, ListItemIcon, ListItemText } from '@material-ui/core/'
+import { TabContext, TabList }from '@material-ui/lab/'
+import green from '@material-ui/core/colors/green'
+import { AccountBox } from '@material-ui/icons'
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexGrow: 1,
+		backgroundColor: theme.palette.background.paper,
+	},
+	button: {
+		'&:hover':{
+			backgroundColor: 'transparent'
+		}
+	},
+	green: {
+		color: theme.palette.getContrastText(green[500]),
+		backgroundColor: green[500]
+	}
+}))
+
+
 
 const Navbar = () => {
-	const padding = {
-		paddingRight: 5
-	}
+	const classes = useStyles()
+	const [value, setValue] = useState('1')
+	const [anchorEl, setAnchorEl] = useState(null)
+	const open = Boolean(anchorEl)
 
-	const paddingL = {
-		paddingLeft: 5
-	}
-
-	const flexClass = {
-		display: 'flex',
-		width: '100 vw',
-		border: '1px solid black',
-		alignItems: 'end'
-	}
-
-	const dispatch = useDispatch()
-
-	const blogs = useSelector(state => state.blogs)
-	const users = useSelector(state => state.users)
 	const user = useSelector(state => state.user)
+	const history = useHistory()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -43,46 +45,89 @@ const Navbar = () => {
 		}
 	}, [dispatch])
 
-	useEffect(() => {
-		dispatch(initBlogs())
-		dispatch(initUsers())
-	}, [])
-
-	const handleLogout = (event) => {
-		event.preventDefault()
+	const handleLogout = () => {
 		window.localStorage.removeItem('loggedBlogappUser')
 		dispatch(clearUser())
+		setAnchorEl(null)
 	}
 
-	return(
-		<Router>
-			<div style={flexClass}>
-				<Link style={padding} to='/'>Home</Link>
-				<Link style={padding} to='/users'>User List</Link>
-				{user? <div><em>{user.name} logged-in</em><button style={paddingL} onClick={handleLogout}>logout</button></div> : <Link style={padding} to='/login'>login</Link>}
-			</div>
+	const handleMenu = (event) => {
+		setAnchorEl(event.currentTarget)
+	}
+	const handleChange = (event, newValue) => {
+		setValue(newValue)
+		history.push(newValue)
+	}
 
-			<Switch>
-				<Route path='/blogs/:id'>
-					<BlogPage blogs={blogs} user={user}/>
-				</Route>
-				<Route path ='/user/:id'>
-					<UserPage users={users} />
-				</Route>
-				<Route path='/users'>
-					<UsersList />
-				</Route>
-				<Route path='/create'>
-					<BlogForm />
-				</Route>
-				<Route path='/login'>
-					<LoginArea />
-				</Route>
-				<Route path='/'>
-					<BlogList />
-				</Route>
-			</Switch>
-		</Router>
+	const handleClose = () => {
+		setAnchorEl(null)
+	}
+
+
+	return(
+		<div className={classes.root}>
+			<TabContext value={value !== '/' || value !== '/users' ? false: value }>
+				<AppBar position="static">
+					<Toolbar>
+						<Box display='flex' flexGrow={1}>
+							<TabList onChange={handleChange} aria-label="site nav menu">
+								<Tab label="Blogs" value="/" />
+								<Tab label="User List" value="/users" />
+							</TabList>
+						</Box>
+						{user ?
+							<Button
+								size='large'
+								className={classes.button}
+								disableElevation={true}
+								variant='contained'
+								color='primary'
+								component={Link}
+								to={`/user/${user.id}`}
+							>
+								<Typography variant="button">{user.username}</Typography></Button>
+							:null}
+						<IconButton
+							aria-label='user menu'
+							aria-controls='menu-appbar'
+							aria-haspopup='true'
+							onClick={handleMenu}
+						>
+							{ user? <Avatar className={classes.green}>{user.username[0]}</Avatar>:<Avatar />}
+						</IconButton>
+						<Menu
+							id='menu-appbar'
+							anchorOrigin={{
+								vertical: 'top',
+								horizontal: 'right'
+							}}
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'right'
+							}}
+							open={open}
+							keepMounted
+							onClose={handleClose}
+							getContentAnchorEl={null}
+						>
+							{user?
+								<div >
+									<MenuItem component={Link}  to={`/user/${user.id}`} onClick={handleClose}>
+										<ListItemIcon><AccountBox /></ListItemIcon>
+										<ListItemText primary={user.name} />
+									</MenuItem>
+									<MenuItem  onClick={handleLogout}>Logout</MenuItem>
+								</div>
+								:
+								<MenuItem component={Link} to={'/login'} onClick={handleClose}>log in</MenuItem>
+							}
+						</Menu>
+					</Toolbar>
+				</AppBar>
+			</TabContext>
+
+
+		</div>
 	)
 }
 

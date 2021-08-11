@@ -1,6 +1,6 @@
 let alert = 0
 
-export const setNotification = (obj, time) => {
+export const setNotification = (obj, duration) => {
 	const { type, message } = obj
 
 	return async dispatch => {
@@ -9,14 +9,13 @@ export const setNotification = (obj, time) => {
 			dispatch({
 				type: 'CLEAR'
 			})
-		},time)
+		},duration)
 		dispatch({
 			type: 'NOTIFY',
-			data: { message:message, type:type }
+			data: { message:message, type:type, autoCloseDuration:duration }
 		})
 	}
 }
-
 
 export const clearNotification = () => {
 	return {
@@ -33,7 +32,7 @@ const notificationReducer = (state='', action) => {
 		return action.data
 	case 'CLEAR':
 		console.log('CLEAR')
-		return ''
+		return {}
 	default:
 		return state
 	}

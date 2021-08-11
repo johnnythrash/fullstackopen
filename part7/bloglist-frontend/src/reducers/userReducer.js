@@ -1,9 +1,15 @@
+import userService from '../services/users'
+
+
 export const setUser = (user) => {
-	return async dispatch =>
+	return async dispatch => {
+		const changedUser = await userService.findUserId(user)
 		dispatch({
 			type: 'SET',
-			data: user
+			data: changedUser
 		})
+	}
+
 }
 
 export const clearUser = ( ) => {
