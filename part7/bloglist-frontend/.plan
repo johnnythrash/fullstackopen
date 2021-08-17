@@ -4,7 +4,6 @@
 * fix login 
 * changed user icon to avatar displaying first letter of username
 * set user avatar to green background when logged in, gray when not
-
-+ open menu dialog directly below user avatar on click
-+ change all forms and buttons over to material-ui forms
-+ fix notifications not showing up or clearing
+* fixed open menu dialog directly below user avatar on click
+* fixed change all forms and buttons over to material-ui forms
+* fixed notifications not showing up or clearing
