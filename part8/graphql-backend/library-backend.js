@@ -114,6 +114,12 @@ const typeDefs = gql`
 		): Book
 	}
 
+	type Mutation {
+		editAuthor(name: String!, setBornTo: Int!): Author
+	}
+
+
+
 	type Query {
 		bookCount: Int!
 		authorCount: Int!
@@ -167,6 +173,24 @@ const resolvers = {
 			}
 			books = books.concat(book)
 			return book
+		},
+		
+		editAuthor: (root, args) => {
+			const currentAuthors = authors.map(author=>author.name)
+			const authorToBeChanged = args.name
+			const authorBirthDate = args.setBornTo
+			let changedAuthor = null
+			if (currentAuthors.includes(authorToBeChanged)){
+				if(authorBirthDate){
+					authors.map(author=>{
+						 if (author.name === authorToBeChanged){
+							author.born = args.setBornTo
+							changedAuthor = author
+						 }
+					})
+				}
+			}
+			return changedAuthor
 		}
 	}
 }
