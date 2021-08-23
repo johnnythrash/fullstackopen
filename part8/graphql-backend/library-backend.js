@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
-const { getArgumentValues } = require('graphql/execution/values')
+const { v1: uuid } = require('uuid')
 
 let authors = [
 	{
@@ -105,6 +105,15 @@ const typeDefs = gql`
 		bookCount: Int!
 	}
 
+	type Mutation {
+		addBook (
+			title: String!
+			author: String!
+			published: Int!
+			genres: [String]
+		): Book
+	}
+
 	type Query {
 		bookCount: Int!
 		authorCount: Int!
@@ -142,6 +151,22 @@ const resolvers = {
 		bookCount: (root) => {
 			let bookArr = books.filter(book=> book.author === root.name)
 			return bookArr.length
+		}
+	},
+
+	Mutation: {
+		addBook: (root, args) => {
+			const book = {...args, id: uuid()}
+			const bookAuthor = book.author
+			currentAuthors = books.map(book=>book.author)
+			if (!currentAuthors.includes(bookAuthor)){
+				authors = authors.concat({
+					name: bookAuthor,
+					id: uuid()
+				})
+			}
+			books = books.concat(book)
+			return book
 		}
 	}
 }
