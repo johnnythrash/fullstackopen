@@ -32,5 +32,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "apollo-link": "^1.2.14",
+    "apollo-link-error": "^1.1.13"
   }
 }
