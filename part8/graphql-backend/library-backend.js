@@ -3,7 +3,19 @@ const {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } = require('apollo-server-core')
 const { v1: uuid } = require('uuid')
+const mongoose = require('mongoose')
+const Author = require('./models/Author')
+const Book = require('./models/Book')
+require('dotenv').config()
 
+mongoose
+  .connect(process.env.DB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting:', error.message)
+  })
 let authors = [
   {
     name: 'Robert Martin',
@@ -97,9 +109,9 @@ const typeDefs = gql`
   type Book {
     title: String!
     published: Int!
-    author: String!
-    id: String!
-    genres: [String]
+    author: Author!
+    id: ID!
+    genres: [String!]!
   }
 
   type Author {
@@ -139,20 +151,29 @@ const findBooksByGenre = (genre, books) => {
 }
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: () => Book.collection.countLength(),
+    authorCount: () => Author.collection.countLength(),
     allBooks: (root, args) => {
-      if (args.author && args.genre) {
-        const authorsBooks = findBooksByAuthor(args.author, books)
-        return findBooksByGenre(args.genre, authorsBooks)
-      } else if (args.author) {
-        return findBooksByAuthor(args.author, books)
-      } else if (args.genre) {
-        return findBooksByGenre(args.genre, books)
-      }
-      return books
+      return Book.find({})
+      // if (args.author) {
+      //   return Book.find({
+      //     author: { $exists: args.author === 'YES' },
+      //   })
+      // }
+      //   if (args.author && args.genre) {
+      //     const authorsBooks = findBooksByAuthor(args.author, books)
+      //     return findBooksByGenre(args.genre, authorsBooks)
+      //   } else if (args.author) {
+      //     return findBooksByAuthor(args.author, books)
+      //   } else if (args.genre) {
+      //     return findBooksByGenre(args.genre, books)
+      //   }
+      //   return books
+      // },
     },
-    allAuthors: () => authors,
+    allAuthors: (root, args) => {
+      return Author.find({})
+    },
   },
 
   Author: {
@@ -164,17 +185,20 @@ const resolvers = {
 
   Mutation: {
     addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      const bookAuthor = book.author
-      currentAuthors = books.map((book) => book.author)
-      if (!currentAuthors.includes(bookAuthor)) {
-        authors = authors.concat({
-          name: bookAuthor,
-          id: uuid(),
-        })
-      }
-      books = books.concat(book)
-      return book
+      const { title, published, genres } = args
+      const author = args.author.name
+      const book = new Book({ ...args, author: author })
+      return book.save()
+      // const bookAuthor = book.author
+      // currentAuthors = books.map((book) => book.author)
+      // if (!currentAuthors.includes(bookAuthor)) {
+      //   authors = authors.concat({
+      //     name: bookAuthor,
+      //     id: uuid(),
+      //   })
+      // }
+      // books = books.concat(book)
+      // return book
     },
 
     editAuthor: (root, args) => {
